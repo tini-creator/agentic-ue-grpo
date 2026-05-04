@@ -84,8 +84,8 @@ agentic-ue-rlhf/
 Requires Python 3.9+. All training runs on CPU — no GPU needed.
 
 ```bash
-git clone https://github.com/your-username/agentic-ue-rlhf.git
-cd agentic-ue-rlhf
+git clone https://github.com/tini-creator/agentic-ue-grpo.git
+cd agentic-ue-grpo
 pip install torch transformers peft trl>=1.3.0 datasets matplotlib numpy
 ```
 
