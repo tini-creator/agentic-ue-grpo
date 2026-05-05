@@ -270,6 +270,16 @@ A smaller OOD Gap indicates the model learned the underlying rules rather than m
 
 ---
 
+## Cite my work
+```bibtex
+@misc{agentic-ue-grpo,
+  title = {agentic-ue-grpo},
+  author = {Majumdar, Sayantini},
+  year = {2026},
+  url = {https://github.com/tini-creator/agentic-ue-grpo},
+  note = {Accessed 2026-05-05}
+}
+```
 ## References
 
 ```bibtex
