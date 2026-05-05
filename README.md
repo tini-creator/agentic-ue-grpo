@@ -1,6 +1,6 @@
-# Agentic UE RLHF
+# Agentic UE GRPO
 
-A reinforcement learning pipeline that fine-tunes a small language model to act as an autonomous **User Equipment (UE) resource manager** for 5G/NR devices. Given a natural-language description of device state (battery level, running application, network condition), the model outputs a structured device configuration in JSON — selecting power mode, DRX cycle, compute offload flag, and maximum bandwidth.
+A reinforcement learning pipeline that fine-tunes a small language model to act as an autonomous **User Equipment (UE) resource manager** for 6G applications. Given a natural-language description of device state (battery level, running application, network condition) for an ongoing application at the UE, the model outputs a structured device configuration in JSON — selecting power mode, DRX cycle, compute offload flag, and maximum bandwidth.
 
 The pipeline runs entirely on **CPU** and is built on [SmolLM2-135M](https://huggingface.co/HuggingFaceTB/SmolLM2-135M), [TRL 1.x (GRPOTrainer)](https://github.com/huggingface/trl), and [PEFT (LoRA)](https://github.com/huggingface/peft).
 
@@ -67,14 +67,19 @@ agentic-ue-rlhf/
 │   └── test_inference.py       # Step 7: Quick inference smoke-test
 │
 └── models/                     # Created during training — not committed
-    ├── sft-ue-baseline/        # LoRA adapter weights (post-SFT)
-    ├── sft-ue-merged/          # Merged full model (post-merge)
-    ├── ppo-ue-agent/           # Final RL-tuned model (post-GRPO)
-    ├── ppo_metrics.json        # Training metrics + post-training KPI snapshot
-    ├── training_dashboard.png  # 6-panel plot
-    ├── reward_curve.png        # Reward-only plot (for papers/slides)
-    ├── eval_results.json       # Full evaluation results
-    └── eval_report.txt         # Human-readable comparison table
+│   ├── sft-ue-baseline/        # LoRA adapter weights (post-SFT)
+│   ├── sft-ue-merged/          # Merged full model (post-merge)
+│   └── grpo-ue-agent/          # Final RL-tuned model (post-GRPO)
+│
+└── metrics/
+│    ├── grpo_metrics.json        # Training metrics + post-training KPI snapshot
+│    ├── eval_results.json       # Full evaluation results
+│    └── eval_report.txt         # Human-readable comparison table
+│
+└── notebooks/
+│    └── reward_curve.png        # Reward-only plot
+
+
 ```
 
 ---
@@ -130,8 +135,8 @@ Fine-tunes the merged SFT model with GRPO using `GRPOTrainer`. The reward functi
 
 ```bash
 python scripts/run_ppo.py
-# → writes models/ppo-ue-agent/
-# → writes models/ppo_metrics.json  (training metrics + KPI snapshot)
+# → writes models/grpo-ue-agent/
+# → writes metrics/grpo_metrics.json  (training metrics + KPI snapshot)
 ```
 
 Approximate training time on CPU: 45–90 minutes.
@@ -160,11 +165,11 @@ Output:
   grpo         1.0%    79.6%      61.5%      18.1%    418.7ms
 ```
 
-Results are saved to `models/eval_results.json` and `models/eval_report.txt`.
+Results are saved to `metrics/eval_results.json` and `metrics/eval_report.txt`.
 
 ### Step 6 — Plot Training Dashboard
 
-Generates a 6-panel training dashboard from `ppo_metrics.json`:
+Generates a 6-panel training dashboard from `grpo_metrics.json`:
 
 | Panel | Metric | Purpose |
 |---|---|---|
@@ -179,12 +184,12 @@ Generates a 6-panel training dashboard from `ppo_metrics.json`:
 python scripts/plot_rewards.py
 
 # custom metrics path
-python scripts/plot_rewards.py --metrics path/to/ppo_metrics.json
+python scripts/plot_rewards.py --metrics path/to/grpo_metrics.json
 ```
 
 Saves `models/training_dashboard.png` (full 6-panel, 300 dpi) and `models/reward_curve.png` (reward-only, suitable for papers).
 
-### Step 7 — Test Inference
+### Step 7 — Test Inference of merged SFT
 
 Quick smoke-test that runs three hardcoded prompts through the merged SFT model and prints the decoded outputs.
 
