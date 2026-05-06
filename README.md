@@ -1,5 +1,8 @@
 # Agentic UE GRPO
 
+> **Copyright (c) 2026 [Sayantini Majumdar/https://github.com/tini-creator/agentic-ue-grpo.git]**
+> **All rights reserved. No part of this repository may be used, redistributed, or modified in any form or by any means without the prior written permission of the author.**
+
 A reinforcement learning pipeline that fine-tunes a small language model to act as an autonomous **User Equipment (UE) resource manager** for 6G applications. Given a natural-language description of device state (battery level, running application, network condition) for an ongoing application at the UE, the model outputs a structured device configuration in JSON — selecting power mode, DRX cycle, compute offload flag, and maximum bandwidth.
 
 The pipeline runs entirely on **CPU** and is built on [SmolLM2-135M](https://huggingface.co/HuggingFaceTB/SmolLM2-135M), [TRL 1.x (GRPOTrainer)](https://github.com/huggingface/trl), and [PEFT (LoRA)](https://github.com/huggingface/peft).
