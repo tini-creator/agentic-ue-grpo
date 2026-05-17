@@ -44,15 +44,16 @@ Natural language prompt                     Structured JSON config
                                            }
 ```
 
-The model is trained in two stages — SFT teaches the output format and basic rules, then GRPO reinforcement learning (Shao et al., 2024) refines decision quality using a scalar reward signal derived from 3GPP-aligned configuration rules (3GPP TS 38.300, TR 38.840).
+The model is trained in two stages: 1) SFT teaches the output format and basic rules, then 2) GRPO reinforcement learning (Shao et al., 2024) refines decision quality using a scalar reward signal derived from 3GPP-aligned configuration rules (3GPP TS 38.300, TR 38.840).
 
-**Why GRPO over PPO?** GRPO eliminates the critic/value-head network required by PPO — it estimates advantage by comparing reward scores within a group of completions sampled for the same prompt. This reduces memory by ~30% and is well-suited to CPU-only training on small models.
+**Why GRPO over PPO?** GRPO eliminates the critic/value-head network required by PPO. It estimates advantage by comparing reward scores within a group of completions sampled for the same prompt. This reduces memory by ~30% and is well-suited to CPU-only training on small models.
 
 ---
 
 ## Training Snapshot
 The reward curve shows the exploration pattern where the reward floor starts at ~3.7 (valid JSON, random logic) and climbs +9.9 pts
 to a peak of 20.9 over 2840 steps.
+
 ![img.png](img.png)
 
 ## Project Structure
@@ -95,7 +96,7 @@ agentic-ue-grpo/
 
 ## Installation
 
-Requires Python 3.9+. All training runs on CPU — no GPU needed.
+Requires Python 3.9+. All training runs on CPU, no GPU needed.
 
 ```bash
 git clone https://github.com/tini-creator/agentic-ue-grpo.git
@@ -148,7 +149,7 @@ python scripts/run_grpo.py
 # → writes metrics/grpo_metrics.json  (training metrics + KPI snapshot)
 ```
 
-Approximate training time on CPU: 45–90 minutes.
+Approximate training time on CPU: 30 s per training step.
 
 ### Step 5 — Evaluate
 
