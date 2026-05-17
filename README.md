@@ -51,7 +51,7 @@ The model is trained in two stages — SFT teaches the output format and basic r
 ---
 
 ## Training Snapshot
-![learning_curve.png](notebooks/learning_curve.png)
+![img.png](img.png)
 
 ## Project Structure
 
