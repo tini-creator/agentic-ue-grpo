@@ -117,7 +117,7 @@ python generate_dataset.py
 
 ### Step 2 — Supervised Fine-Tuning (SFT)
 
-Fine-tunes SmolLM2-135M on the dataset using LoRA (r=8, targeting `q_proj` and `v_proj`) via TRL's `SFTTrainer`. Teaches the model the output format and the basic configuration rules.
+Fine-tunes SmolLM2-135M on the dataset using LoRA via TRL's `SFTTrainer`. Teaches the model the output format and the basic configuration rules.
 
 ```bash
 cd scripts
@@ -163,13 +163,13 @@ python scripts/evaluate.py --baselines random sft
 python scripts/evaluate.py --grpo-model models/checkpoint-400
 ```
 
-Output (TBU):
+Output KPIs:
 ```
   Baseline      CVR     ID Acc    OOD Acc    OOD Gap    Latency
   ──────────────────────────────────────────────────────────────
-  random      80.0%     3.1%       2.8%       0.3%      0.1ms
-  sft          8.0%    61.4%      38.2%      23.2%    412.3ms
-  grpo         1.0%    79.6%      61.5%      18.1%    418.7ms
+  random      99.0%      0.0%       7.1%     -7.1%       0.0ms
+  sft         45.0%     21.5%      17.9%      3.6%    3864.9ms
+  grpo         5.0%     30.5%      28.6%      1.9%    3339.2ms
 ```
 
 Results are saved to `metrics/eval_results.json` and `metrics/eval_report.txt`.
