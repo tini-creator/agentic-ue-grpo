@@ -9,6 +9,7 @@ The pipeline runs entirely on **CPU** and is built on [SmolLM2-135M](https://hug
 
 ---
 
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -49,6 +50,9 @@ The model is trained in two stages — SFT teaches the output format and basic r
 
 ---
 
+## Training Snapshot
+![learning_curve.png](notebooks/learning_curve.png)
+
 ## Project Structure
 
 ```
@@ -64,22 +68,22 @@ agentic-ue-rlhf/
 ├── scripts/
 │   ├── run_sft.py              # Step 2: Supervised fine-tuning with SFTTrainer
 │   ├── merge_model.py          # Step 3: Merge LoRA adapter into base weights
-│   ├── run_ppo.py              # Step 4: GRPO reinforcement learning
+│   ├── run_grpo.py             # Step 4: GRPO reinforcement learning
 │   ├── evaluate.py             # Step 5: CVR + OOD evaluation across baselines
 │   ├── plot_rewards.py         # Step 6: 6-panel training dashboard
 │   └── test_inference.py       # Step 7: Quick inference smoke-test
 │
-└── models/                     # Created during training — not committed
+├── models/                     # Created during training — not committed
 │   ├── sft-ue-baseline/        # LoRA adapter weights (post-SFT)
 │   ├── sft-ue-merged/          # Merged full model (post-merge)
 │   └── grpo-ue-agent/          # Final RL-tuned model (post-GRPO)
 │
-└── metrics/
-│    ├── grpo_metrics.json        # Training metrics + post-training KPI snapshot
+├── metrics/
+│    ├── grpo_metrics.json       # Training metrics + post-training KPI snapshot
 │    ├── eval_results.json       # Full evaluation results
 │    └── eval_report.txt         # Human-readable comparison table
 │
-└── notebooks/
+├── notebooks/
 │    └── reward_curve.png        # Reward-only plot
 
 
@@ -134,10 +138,10 @@ python scripts/merge_model.py
 
 ### Step 4 — GRPO Reinforcement Learning
 
-Fine-tunes the merged SFT model with GRPO using `GRPOTrainer`. The reward function scores each generated config on JSON validity, schema correctness, 3GPP-aligned logic, and bandwidth accuracy. After training, automatically runs a post-training KPI evaluation (CVR + OOD) and appends a snapshot to `ppo_metrics.json`.
+Fine-tunes the merged SFT model with GRPO using `GRPOTrainer`. The reward function scores each generated config on JSON validity, schema correctness, 3GPP-aligned logic, and bandwidth accuracy. After training, automatically runs a post-training KPI evaluation (CVR + OOD) and appends a snapshot to `grpo_metrics.json`.
 
 ```bash
-python scripts/run_ppo.py
+python scripts/run_grpo.py
 # → writes models/grpo-ue-agent/
 # → writes metrics/grpo_metrics.json  (training metrics + KPI snapshot)
 ```
@@ -159,7 +163,7 @@ python scripts/evaluate.py --baselines random sft
 python scripts/evaluate.py --grpo-model models/checkpoint-400
 ```
 
-Output:
+Output (TBU):
 ```
   Baseline      CVR     ID Acc    OOD Acc    OOD Gap    Latency
   ──────────────────────────────────────────────────────────────
