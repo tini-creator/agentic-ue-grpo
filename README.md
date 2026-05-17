@@ -1,9 +1,9 @@
-# Agentic UE GRPO
+# Agentic UE Resource Manager
 
 > **Copyright (c) 2026 [Sayantini Majumdar/https://github.com/tini-creator/agentic-ue-grpo.git]**
 > **All rights reserved. No part of this repository may be used, redistributed, or modified in any form or by any means without the prior written permission of the author.**
 
-A reinforcement learning pipeline that fine-tunes a small language model to act as an autonomous **User Equipment (UE) resource manager** for 6G applications. Given a natural-language description of device state (battery level, running application, network condition) for an ongoing application at the UE, the model outputs a structured device configuration in JSON — selecting power mode, DRX cycle, compute offload flag, and maximum bandwidth.
+A reinforcement learning pipeline that fine-tunes a small language model to act as an autonomous **User Equipment (UE) resource manager** for 6G applications. Given a natural-language description of device state (battery level, running application, network condition) for an ongoing application at the UE, the model outputs a structured device configuration in JSON — selecting power mode, DRX cycle, compute offload flag, and maximum bandwidth. This work is based on the paradigm Reinforcement Learning for Verifiable Rewards (RLVR).
 
 The pipeline runs entirely on **CPU** and is built on [SmolLM2-135M](https://huggingface.co/HuggingFaceTB/SmolLM2-135M), [TRL 1.x (GRPOTrainer)](https://github.com/huggingface/trl), and [PEFT (LoRA)](https://github.com/huggingface/peft).
 
@@ -56,7 +56,7 @@ The model is trained in two stages — SFT teaches the output format and basic r
 ## Project Structure
 
 ```
-agentic-ue-rlhf/
+agentic-ue-grpo/
 │
 ├── data/
 │   ├── generate_dataset.py     # Synthetic dataset generator (500 samples)
@@ -194,7 +194,7 @@ python scripts/plot_rewards.py
 python scripts/plot_rewards.py --metrics path/to/grpo_metrics.json
 ```
 
-Saves `models/training_dashboard.png` (full 6-panel, 300 dpi) and `models/reward_curve.png` (reward-only, suitable for papers).
+Saves `models/training_dashboard.png` (full 6-panel, 300 dpi) and `models/reward_curve.png` (reward-only).
 
 ### Step 7 — Test Inference of merged SFT
 
