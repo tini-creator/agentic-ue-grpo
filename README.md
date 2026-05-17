@@ -51,6 +51,8 @@ The model is trained in two stages — SFT teaches the output format and basic r
 ---
 
 ## Training Snapshot
+The reward curve shows the exploration pattern where the reward floor starts at ~3.7 (valid JSON, random logic) and climbs +9.9 pts
+to a peak of 20.9 over 2840 steps.
 ![img.png](img.png)
 
 ## Project Structure
@@ -239,21 +241,24 @@ App bandwidth profiles:
 
 **Scoring breakdown:**
 
-| Component | Points |
-|---|---|
-| Valid JSON (post-repair) | +2 |
-| Each correct required key present | +1 each (×4) |
-| Perfect schema (all 4 keys, no extras) | +2 |
-| Rule A correct (battery ≤ 20%) | +15 |
-| Rule A violated | −5 |
-| Heavy compute: correct mode + DRX | +10 |
-| Heavy compute: offload correct | +5 |
-| Game: short DRX | included in logic |
-| Bandwidth within ±20% of expected | +5 |
-| Bandwidth within ±50% of expected | +1 |
-| Bandwidth wrong order of magnitude | −3 |
-| Hallucinated extra keys | −2 each |
-| Parse failure | −4 (early exit) |
+| Stage         | Component | Points |
+|---------------|---|---|
+| 0 — Parse     | Parse failure | −4.0 (early exit) |
+| 1 — Format    | Valid JSON (post-repair) | +0.5 |
+| 1 — Format    | Each correct required key | +0.25 each (max +1.0) |
+| 1 — Format    | Hallucinated extra key | −1.0 each |
+| 1 — Format    | Wrong value type per key | −1.0 |
+| 2 — Schema    | All 4 keys present, no extras | +1.0 |
+| 3 — Logic     | Rule A correct (all three fields) | +8+8+4 = +20 |
+| 3 — Logic     | Rule A per-field violation | −5 / −5 / −3 |
+| 3 — Logic     | Heavy compute: correct mode + DRX | +10 |
+| 3 — Logic     | Heavy compute: offload correct | +5 |
+| 3 — Logic     | Game: short DRX missing | −3 |
+| 4 — Bandwidth | Within ±20% of expected | +5 |
+| 4 — Bandwidth | Within ±50% of expected | +1 |
+| 4 — Bandwidth | Wrong order of magnitude | −3 |
+ 
+Effective reward range: **−4** (garbled output) → **~4** (valid schema, wrong logic) → **~27.5** (Rule-A perfect).
 
 Terminal output during training shows context, raw output, repaired JSON, and colour-coded reward per step. Pass `verbose=False` to `calculate_ue_reward()` to suppress this during inference.
 
